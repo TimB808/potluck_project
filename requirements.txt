@@ -4,3 +4,7 @@ matplotlib
 nltk
 seaborn
 streamlit
+requests
+streamlit_lottie
+scikit-learn
+gensim
