@@ -42,9 +42,14 @@ st.write('---')
 with st.container():
     left_column, right_column = st.columns(2)
     with left_column:
-        st.subheader('Enter ingredients below:')
-        st.write('##')
-        st.text_area('Add to the mix')
+        with st.form('Where the magic happens...'):
+            ingredients = st.text_area('Enter your indregients here...', 'honey')
+            # function to convert data format ?
+
+            st.form_submit_button('Im feeling lucky')
+            # function to send info to model, either locally or api
+            # prediction = predict(ingredient)
 
     with right_column:
         st.subheader('Where the recipes are returned')
+        # returns prediction, check data type
