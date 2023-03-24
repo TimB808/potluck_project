@@ -41,7 +41,6 @@ def tokenize(ingr_list):
 #preprocessing for df
 def preprocess_text(text):
 
-
     # make string lowercase
     text = text.lower()
 
@@ -70,11 +69,11 @@ def preprocess_text(text):
 def preproc_input(user_input):
     # lowercase
     my_ing = [ingr.lower() for ingr in user_input]
-    print(f'{my_ing}  lowercased. Type is {type(my_ing)}')
+    # print(f'{my_ing}  lowercased. Type is {type(my_ing)}')
 
     # remove numbers and spaces
     my_ing = [remove_num(ingr).strip() for ingr in my_ing]
-    print(f'{my_ing} removed nums. Type is {type(my_ing)}')
+    # print(f'{my_ing} removed nums. Type is {type(my_ing)}')
 
     #remove spaces
     #my_ing = [text.strip() for text in my_ing]
@@ -86,11 +85,11 @@ def preproc_input(user_input):
     #tokenize
     my_ing = tokenize(my_ing)
     #print(f'{my_ing} tokenize. Type is {type(my_ing)}')
-
+    ## insert the following to replace tokenise
+    # my_ing = [i.replace(' ', '_') for i in my_ing]
 
     # add in generic ingredients (instead of removing stopwords)
     my_ing = my_ing + ['water', 'salt', 'pepper']
     #print(f'{my_ing} - added generic ings. Type is {type(my_ing)}')
-
 
     return set(my_ing)
