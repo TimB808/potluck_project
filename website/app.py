@@ -16,7 +16,12 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(F"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-local_css('/home/tim/code/TimB808/potluck_project/website/style/style.css')
+
+root_dir = os.path.dirname(__file__)
+css_path = root_dir+"/style/style.css"
+
+local_css(css_path)
+
 
 # LOAD ASSETS
 lottie_coding = load_lottieurl('https://assets3.lottiefiles.com/packages/lf20_fefIZO.json')
@@ -49,9 +54,6 @@ with st.container():
 
             st.form_submit_button('Im feeling lucky')
             prediction = predict(ingredients.split(','))
-            print(ingredients.split(','))
-            print(prediction)
-            #st.write(prediction[name][0])
 
     with right_column:
         st.subheader('Where the recipes are returned')
