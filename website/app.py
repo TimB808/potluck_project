@@ -16,7 +16,7 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(F"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-local_css('/home/tim/code/TimB808/potluck_project/website/style/style.css')
+local_css('style/style.css')
 
 # LOAD ASSETS
 lottie_coding = load_lottieurl('https://assets3.lottiefiles.com/packages/lf20_fefIZO.json')
