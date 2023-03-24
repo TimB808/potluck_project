@@ -16,7 +16,7 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(F"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-local_css('../style/style.css')
+local_css('/home/tim/code/TimB808/potluck_project/website/style/style.css')
 
 # LOAD ASSETS
 lottie_coding = load_lottieurl('https://assets3.lottiefiles.com/packages/lf20_fefIZO.json')
@@ -43,12 +43,17 @@ with st.container():
     left_column, right_column = st.columns(2)
     with left_column:
         with st.form('Where the magic happens...'):
-            ingredients = st.text_area('Enter your indregients here...', 'honey')
+            #ingredients = ['salt', 'water', 'tomatoes']
+            ingredients = st.text_area('Enter your ingredients here, separated by a comma')
             # function to convert data format ?
 
             st.form_submit_button('Im feeling lucky')
-            prediction = predict(ingredients)
+            prediction = predict(ingredients.split(','))
+            print(ingredients.split(','))
+            print(prediction)
+            #st.write(prediction[name][0])
 
     with right_column:
         st.subheader('Where the recipes are returned')
         # returns prediction, check data type
+        st.dataframe(prediction)
