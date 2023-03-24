@@ -1,7 +1,7 @@
 import requests
 import streamlit as st
 from streamlit_lottie import st_lottie
-# from prediction import predict
+from website.prediction import predict
 
 st.set_page_config(page_title="Pot Luck", page_icon=":stew:", layout="wide")
 
@@ -16,7 +16,7 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(F"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-local_css('style/style.css')
+local_css('../style/style.css')
 
 # LOAD ASSETS
 lottie_coding = load_lottieurl('https://assets3.lottiefiles.com/packages/lf20_fefIZO.json')
@@ -47,8 +47,7 @@ with st.container():
             # function to convert data format ?
 
             st.form_submit_button('Im feeling lucky')
-            # function to send info to model, either locally or api
-            # prediction = predict(ingredient)
+            prediction = predict(ingredients)
 
     with right_column:
         st.subheader('Where the recipes are returned')

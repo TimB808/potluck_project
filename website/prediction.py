@@ -1,10 +1,14 @@
 import joblib
+from matplotlib.pyplot import clf
+from potluck_code.logic import model
 
 # Save model
-# joblib.dump(clf, “rf_model.sav”)
+joblib.dump(clf, 'rf_model.sav')
 
 
-# def predict(data):
-#
-#     clf = joblib.load('rf_model.sav')
-#     return clf.predict(data)
+def predict(ingredients):
+    clf = model.easy_search(ingredients, 3)
+    return clf
+
+if __name__=='__main__':
+    print(predict(['water', 'salt', 'tomatoes']))
