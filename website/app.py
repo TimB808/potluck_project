@@ -1,7 +1,9 @@
 import requests
 import streamlit as st
+import os
 from streamlit_lottie import st_lottie
 from website.prediction import predict
+
 
 st.set_page_config(page_title="Pot Luck", page_icon=":stew:", layout="wide")
 
