@@ -34,7 +34,7 @@ def word2vec_search(user_input, model, k):
 
 def easy_search(user_input, k):
     # load baseline df
-    data_path = os.path.dirname(os.path.dirname(os.path.dirname(os.getcwd())))+'raw_data/baseline_df_short.csv'
+    data_path = os.path.dirname(os.path.dirname(os.path.dirname(os.getcwd())))+'raw_data/clean_df.csv'
     baseline_df = pd.read_pickle(data_path)
 
     # Preproc
@@ -49,4 +49,4 @@ def easy_search(user_input, k):
     ext_set = word2vec_search(preprocced_input, model, k)
 
     # search after applying preproc
-    return baseline_df[baseline_df['clean_ingredients_set'].apply(lambda x: x.issubset(ext_set))]
+    return baseline_df[baseline_df['search_ingredients'].apply(lambda x: x.issubset(ext_set))]
