@@ -32,21 +32,21 @@ def word2vec_search(user_input, model, k):
 
 # define search function
 
-def easy_search(user_input, k):
+def easy_search(model, df, user_input, k):
     # load baseline df
-    data_path = os.path.dirname(os.path.dirname(os.path.dirname(os.getcwd())))+'raw_data/clean_df.csv'
-    baseline_df = pd.read_pickle(data_path)
+    #data_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))+'/raw_data/clean_df.pkl'
+    #baseline_df = pd.read_pickle(data_path)
 
     # Preproc
     preprocced_input = preproc_input(user_input)
 
     #load the model
-    root_dir = os.path.dirname(__file__)
-    data_path2 = root_dir+'/food2vec_models/model.bin'
-    model = Word2Vec.load(data_path2)
+    #root_dir = os.path.dirname(__file__)
+    #data_path2 = root_dir+'/food2vec_models/model.bin'
+    #model = Word2Vec.load(data_path2)
 
     # word2vec search function - to get extended list of similar ings
     ext_set = word2vec_search(preprocced_input, model, k)
 
     # search after applying preproc
-    return baseline_df[baseline_df['search_ingredients'].apply(lambda x: x.issubset(ext_set))]
+    return df[df['search_ingredients'].apply(lambda x: x.issubset(ext_set))]

@@ -4,10 +4,13 @@ import os
 from streamlit_lottie import st_lottie
 from website.prediction import predict
 import os
+import pandas as pd
+from gensim.models import Word2Vec
 
 
 st.set_page_config(page_title="Pot Luck", page_icon=":stew:", layout="wide")
 
+@st.cache_resource
 def load_lottieurl(url):
     r = requests.get(url)
     if r.status_code != 200:
@@ -25,7 +28,23 @@ css_path = root_dir+"/style/style.css"
 local_css(css_path)
 
 # LOAD ASSETS
+
 lottie_coding = load_lottieurl('https://assets3.lottiefiles.com/packages/lf20_fefIZO.json')
+
+@st.cache_resource
+def load_df():
+    data_path = os.path.dirname(os.path.dirname(__file__))+'/raw_data/clean_df.pkl'
+    df = pd.read_pickle(data_path)
+    return df
+df = load_df()
+
+@st.cache_resource
+def load_model():
+    root_dir = os.path.dirname(os.path.dirname(__file__))
+    data_path2 = root_dir+'/potluck_code/logic/food2vec_models/model.bin'
+    model = Word2Vec.load(data_path2)
+    return model
+model = load_model()
 
 # HEADER SECTION
 with st.container():
@@ -49,7 +68,7 @@ with st.container():
                 st.caption('Please enter some ingredients :tomato: :corn: :eggplant:')
 
             elif submission:
-                prediction = predict(ingredients.split(','), int(mix))
+                prediction = predict(model, df, ingredients.split(','), int(mix))
 
                 recipes = len(prediction)
 

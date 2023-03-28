@@ -1,11 +1,6 @@
 
 ######################### ESSENTIALS #########################
 
-import pandas as pd
-import numpy as np
-from sklearn.pipeline import make_pipeline
-from sklearn.compose import ColumnTransformer, make_column_transformer
-
 ######################### NLP #########################
 import string
 
@@ -20,23 +15,15 @@ from nltk.corpus import stopwords
 '''
 
 def remove_num(text):
-    text = ''.join(char for char in text if not char.isdigit())
-    return text
+    return ''.join(char for char in text if not char.isdigit())
 
-def remove_punct_list(text):
-    cleaned_text = []
-    for word in text:
+def remove_punct_list(ingr_list):
+    cleaned_list = []
+    for word in ingr_list:
         for punctuation in string.punctuation:
             word = word.replace(punctuation, '')
-        cleaned_text.append(word)
-    return cleaned_text
-
-
-def tokenize(ingr_list):
-    tokenized_list = []
-    for ingr in ingr_list:
-        tokenized_list += ingr.split(' ')
-    return tokenized_list
+        cleaned_list.append(word)
+    return cleaned_list
 
 #preprocessing for df
 def preprocess_text(text):
@@ -65,31 +52,28 @@ def preprocess_text(text):
     return clean_txt
 
 #preprocessing for user input
-
 def preproc_input(user_input):
-    # lowercase
-    my_ing = [ingr.lower() for ingr in user_input]
-    # print(f'{my_ing}  lowercased. Type is {type(my_ing)}')
+    #preproces input same way as df
 
-    # remove numbers and spaces
-    my_ing = [remove_num(ingr).strip() for ingr in my_ing]
-    # print(f'{my_ing} removed nums. Type is {type(my_ing)}')
+    #1.lowercase
+    user_input = [i.lower() for i in user_input]
 
-    #remove spaces
-    #my_ing = [text.strip() for text in my_ing]
+    #2. remove numbers
+    user_input = [remove_num(i) for i in user_input]
+    
+    #3. remove spaces
+    user_input =  [i.strip() for i in user_input]
 
-    #remove punctuation
-    my_ing = remove_punct_list(my_ing)
-    #print(f'{my_ing} removed punct. Type is {type(my_ing)}')
+    #4. remove special chars
+    user_input = remove_punct_list(user_input)
 
-    #tokenize
-    my_ing = tokenize(my_ing)
-    #print(f'{my_ing} tokenize. Type is {type(my_ing)}')
-    ## insert the following to replace tokenise
-    # my_ing = [i.replace(' ', '_') for i in my_ing]
+    #5. join words with underscores
+    user_input = [i.replace(' ', '_') for i in user_input]
+    
+    #6. add in generic ingredients (instead of removing stopwords)
+    user_input = user_input + ['water', 'salt', 'pepper']
 
-    # add in generic ingredients (instead of removing stopwords)
-    my_ing = my_ing + ['water', 'salt', 'pepper']
-    #print(f'{my_ing} - added generic ings. Type is {type(my_ing)}')
-
-    return set(my_ing)
+    #7. change to set -> maybe leave it for now?
+    user_input = set(user_input)
+    
+    return user_input
