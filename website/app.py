@@ -1,4 +1,5 @@
 import requests
+import pickle
 import streamlit as st
 import os
 from streamlit_lottie import st_lottie
@@ -7,6 +8,18 @@ import os
 import pandas as pd
 from gensim.models import Word2Vec
 
+from google.oauth2 import service_account
+from google.cloud import storage
+
+# Create API client.
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"]
+)
+
+client = storage.Client(credentials=credentials)
+
+
+# ---add heading---
 
 st.set_page_config(page_title="Pot Luck", page_icon=":stew:", layout="wide")
 
@@ -31,12 +44,37 @@ local_css(css_path)
 
 lottie_coding = load_lottieurl('https://assets3.lottiefiles.com/packages/lf20_fefIZO.json')
 
-@st.cache_resource
+
+
+# code for local loading
 def load_df():
     data_path = os.path.dirname(os.path.dirname(__file__))+'/raw_data/clean_df.pkl'
     df = pd.read_pickle(data_path)
     return df
-df = load_df()
+# df = load_df()
+
+
+
+# GCS code to add - to replace load_df function; what to put instead of 'download_as_string'?:
+@st.cache_resource
+def read_file(bucket_name, file_path):
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(file_path)
+    # content = bucket.blob(file_path).download_as_string()
+
+
+    pickle_in = blob.download_as_string()
+    df = pickle.loads(pickle_in)
+
+    return df
+
+bucket_name = "potluck_bucket"
+file_path = "clean_df.pkl"
+
+df = read_file(bucket_name, file_path)
+
+
+
 
 @st.cache_resource
 def load_model():
@@ -62,13 +100,17 @@ with st.container():
             ingredients = st.text_area('Enter your ingredients here, separated by a comma')
             mix = st.slider('How adventurous are you feeling ?', 1, 5, value=3)
 
+
             submission = st.form_submit_button('I am hungry...')
 
             if submission and ingredients == '':
                 st.caption('Please enter some ingredients :tomato: :corn: :eggplant:')
 
             elif submission:
-                prediction = predict(model, df, ingredients.split(','), int(mix))
+                len_ingredients = len(ingredients.split(','))
+                num_ingredients = st.slider('How many ingredients would you like in your recipe as a minimum?', 1, len_ingredients, value=1)
+
+                prediction = predict(model, df, ingredients.split(','), int(mix), num_ingredients)
 
                 recipes = len(prediction)
 

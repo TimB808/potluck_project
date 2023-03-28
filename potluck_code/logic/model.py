@@ -32,7 +32,7 @@ def word2vec_search(user_input, model, k):
 
 # define search function
 
-def easy_search(model, df, user_input, k):
+def easy_search(model, df, user_input, k, num_ing=1):
     # load baseline df
     #data_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))+'/raw_data/clean_df.pkl'
     #baseline_df = pd.read_pickle(data_path)
@@ -48,5 +48,9 @@ def easy_search(model, df, user_input, k):
     # word2vec search function - to get extended list of similar ings
     ext_set = word2vec_search(preprocced_input, model, k)
 
-    # search after applying preproc
-    return df[df['search_ingredients'].apply(lambda x: x.issubset(ext_set))]
+    # define recipe_df as full search results
+    recipe_df = df[df['search_ingredients'].apply(lambda x: x.issubset(ext_set))]
+
+    # return filtered recipe_df
+    return recipe_df[recipe_df['n_ingredients'] >= num_ing]
+    #return df[df['search_ingredients'].apply(lambda x: x.issubset(ext_set))]

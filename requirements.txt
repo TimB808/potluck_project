@@ -8,3 +8,6 @@ requests
 streamlit_lottie
 scikit-learn
 gensim
+
+google-cloud-storage
+pickle
