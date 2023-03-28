@@ -85,13 +85,18 @@ with st.container():
     elif submission and recipes > 0:
         wcols = 3
         cols = st.columns(wcols)
-
         for i in range(recipes):
             col = cols[i%wcols]
-
             with col:
-                st.markdown(prediction.iloc[i]['name'])
+                left, right = st.columns(2)
+                with left:
+                    st.write(prediction.iloc[i]['name'])
+                with right:
+                    st.write('Average Rating --->', prediction.iloc[i]['avg_rating'])
                 with st.expander('Expand for full recipe'):
-                    st.write(prediction.iloc[i]['steps'])
+                    st.write('Ingredients\n', prediction.iloc[i]['ingredients'])
+                    st.text('')
+                    st.write('Steps\n', prediction.iloc[i]['steps'])
+
     elif submission:
         st.caption('Sorry no recipes, might be time to go to the shops..! :blush:')
