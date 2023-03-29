@@ -35,7 +35,6 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(F"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-root_dir = os.path.dirname(__file__)
 css_path = "style/style.css"
 
 local_css(css_path)
@@ -48,7 +47,7 @@ lottie_coding = load_lottieurl('https://assets3.lottiefiles.com/packages/lf20_fe
 
 # code for local loading
 def load_df():
-    data_path = os.path.dirname(os.path.dirname(__file__))+'/raw_data/clean_df.pkl'
+    data_path = 'raw_data/clean_df.pkl'
     df = pd.read_pickle(data_path)
     return df
 # df = load_df()
@@ -79,8 +78,7 @@ df = read_file(bucket_name, file_path)
 
 @st.cache_resource
 def load_model():
-    root_dir = os.path.dirname(os.path.dirname(__file__))
-    data_path2 = root_dir+'/potluck_code/food2vec_models/model.bin'
+    data_path2 = 'potluck_code/food2vec_models/model.bin'
     model = Word2Vec.load(data_path2)
     return model
 model = load_model()
