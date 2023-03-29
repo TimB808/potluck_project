@@ -42,8 +42,7 @@ def preproc_input(user_input):
     user_input = [i.replace(' ', '_') for i in user_input]
 
     #6. add in generic ingredients (instead of removing stopwords)
-    #user_input = user_input + ['water', 'salt', 'pepper']
-    # -> moved to the word2vec search fct
+    user_input = user_input + ['water', 'salt', 'pepper']
 
     #7. change to set -> maybe leave it for now?
     user_input = set(user_input)

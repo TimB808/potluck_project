@@ -13,7 +13,7 @@ from google.cloud import storage
 
 # Create API client.
 credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"]
+   st.secrets["gcp_service_account"]
 )
 
 client = storage.Client(credentials=credentials)
@@ -50,7 +50,7 @@ def load_df():
     data_path = 'raw_data/clean_df.pkl'
     df = pd.read_pickle(data_path)
     return df
-# df = load_df()
+#df = load_df()
 
 
 
@@ -100,21 +100,20 @@ with st.container():
 with st.container():
     left_column, right_column = st.columns(2)
     with left_column:
+        
         with st.form('Where the magic happens...'):
-            ingredients = st.text_area('Enter your ingredients here, separated by a comma')
+            st.markdown('**Enter your ingredients here, separated by a comma**')
+            ingredients = st.text_area(label='')
 
-            mix = st.slider('How adventurous are you feeling ?', 1, 5, value=3)
+            mix = st.slider('How adventurous are you feeling ?', 0, 5, value=2)
 
             submission = st.form_submit_button('I am hungry...')
 
             if submission and ingredients == '':
-                st.caption('Please enter some ingredients :tomato: :corn: :eggplant:')
+                st.write('Please enter some ingredients :tomato: :corn: :eggplant:')
 
             elif submission:
-                len_ingredients = len(ingredients.split(','))
-                num_ingredients = st.slider('How many ingredients would you like in your recipe as a minimum?', 1, len_ingredients, value=1)
-
-                prediction = easy_search(model, df, ingredients.split(','), int(mix), num_ingredients)
+                prediction = easy_search(model, df, ingredients.split(','), int(mix))
 
                 recipes = len(prediction)
 
@@ -129,22 +128,25 @@ with st.container():
     if submission and ingredients == '':
         st.write('No recipes available')
     elif submission and recipes > 0:
-        wcols = 3
+        wcols = 2
         cols = st.columns(wcols)
         for i in range(recipes):
             col = cols[i%wcols]
             with col:
-                left, right = st.columns(2)
+                left, middle, right = st.columns([3,1,2])
                 with left:
                     name = prediction.iloc[i]['name']
-                    st.markdown(f'<p1 style="color:#e0d31d">{name}</p1>', unsafe_allow_html=True)
+                    st.markdown(f'<p1 style="color:#f4976c">{name}</p1>', unsafe_allow_html=True)
                 with right:
                     rating = f"Average Rating {prediction.iloc[i]['avg_rating']}:star:"
-                    st.markdown(f'<p1 style="color:#e0d31d">{rating}</p1>', unsafe_allow_html=True)
+                    st.markdown(f'<p1 style="color:#f4976c">{rating}</p1>', unsafe_allow_html=True)
+                with middle:
+                    rating = f"{prediction.iloc[i]['minutes']} mins"
+                    st.markdown(f'<p1 style="color:#f4976c">{rating}</p1>', unsafe_allow_html=True)
                 with st.expander('Expand for full recipe'):
                     st.write('Ingredients\n', prediction.iloc[i]['ingredients'])
                     st.text('')
                     st.write('Steps\n', prediction.iloc[i]['steps'])
 
     elif submission:
-        st.caption('Sorry no recipes, might be time to go to the shops..! :blush:')
+        st.write('Sorry no recipes, might be time to go to the shops..! :blush:')
