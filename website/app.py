@@ -84,22 +84,27 @@ def load_model():
     return model
 model = load_model()
 
-# HEADER SECTION
-with st.container():
-    st.title('Welcome to Pot Luck :stew:')
-    st.write('---')
-
-# INTRO AND SEARCH FUNCTION
+# HEADER SECTION & INTRO
 with st.container():
     left_column, right_column = st.columns(2)
     with left_column:
+        st.title('Welcome to Pot Luck :stew:')
         st.subheader('Here to make your meal time more interesting...')
-        st.write('Created by Tim, Eva, Omar and Alex, Pot Luck is here to help make the most of what is in your cupboards. Not had time to go shopping yet this week? Do you have a numerous random ingredients leftover that you are not sure what to do with? Pot Luck will offer a solution...')
+    with right_column:
+        st.write('Created by Tim, Eva, Omar and Alex, Pot Luck is here to help make the most of what is in your cupboards.')
+        st.write('Not had time to go shopping yet this week?')
+        st.write('Do you have a numerous random ingredients leftover that you are not sure what to do with?')
+        st.write('Pot Luck will offer a solution...')
+    st.write('---')
 
+# SEARCH FUNCTION
+with st.container():
+    left_column, right_column = st.columns(2)
+    with left_column:
         with st.form('Where the magic happens...'):
             ingredients = st.text_area('Enter your ingredients here, separated by a comma')
-            mix = st.slider('How adventurous are you feeling ?', 1, 5, value=3)
 
+            mix = st.slider('How adventurous are you feeling ?', 1, 5, value=3)
 
             submission = st.form_submit_button('I am hungry...')
 
@@ -132,9 +137,11 @@ with st.container():
             with col:
                 left, right = st.columns(2)
                 with left:
-                    st.write(prediction.iloc[i]['name'])
+                    name = prediction.iloc[i]['name']
+                    st.markdown(f'<p1 style="color:#e0d31d">{name}</p1>', unsafe_allow_html=True)
                 with right:
-                    st.write('Average Rating --->', prediction.iloc[i]['avg_rating'])
+                    rating = f"Average Rating {prediction.iloc[i]['avg_rating']}:star:"
+                    st.markdown(f'<p1 style="color:#e0d31d">{rating}</p1>', unsafe_allow_html=True)
                 with st.expander('Expand for full recipe'):
                     st.write('Ingredients\n', prediction.iloc[i]['ingredients'])
                     st.text('')
