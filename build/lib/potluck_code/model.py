@@ -6,7 +6,7 @@ from potluck_code.preprocessor import preproc_input
 #extend user input by the nearest ingredients found in the model
 
 def word2vec_search(user_input, model, k):
-    extended_input = list(user_input) + ['water', 'salt', 'pepper']
+    extended_input = list(user_input)
     for ingr in list(user_input):
         try:
             k_nearest_ingr = model.wv.most_similar(ingr, topn=k)
@@ -20,7 +20,7 @@ def word2vec_search(user_input, model, k):
 
 # define search function
 
-def easy_search(model, df, user_input, k):
+def easy_search(model, df, user_input, k, num_ing=1):
 
     # Preproc
     preprocced_input = preproc_input(user_input)
@@ -30,8 +30,6 @@ def easy_search(model, df, user_input, k):
 
     # define recipe_df as full search results
     recipe_df = df[df['search_ingredients'].apply(lambda x: x.issubset(ext_set))]
-    
-    recipe_df['input_matching_rate'] = recipe_df['search_ingredients'].apply(lambda x: len(x.intersection(preprocced_input)))/len(preprocced_input)
 
     # return filtered recipe_df
-    return recipe_df.sort_values(['input_matching_rate', 'avg_rating'], ascending=[False, False]).iloc[:16]
+    return recipe_df[recipe_df['n_ingredients'] >= num_ing]
