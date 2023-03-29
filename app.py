@@ -1,7 +1,6 @@
 import requests
 import pickle
 import streamlit as st
-import os
 from streamlit_lottie import st_lottie
 
 from potluck_code.model import easy_search
@@ -15,8 +14,6 @@ from google.cloud import storage
 credentials = service_account.Credentials.from_service_account_info(
    st.secrets["gcp_service_account"]
 )
-
-client = storage.Client(credentials=credentials)
 
 
 # ---add heading---
@@ -50,17 +47,17 @@ def load_df():
     data_path = 'raw_data/clean_df.pkl'
     df = pd.read_pickle(data_path)
     return df
-#df = load_df()
+df = load_df()
 
 
 
 # GCS code to add - to replace load_df function; what to put instead of 'download_as_string'?:
 @st.cache_resource
 def read_file(bucket_name, file_path):
+    client = storage.Client(credentials=credentials)
     bucket = client.bucket(bucket_name)
     blob = bucket.blob(file_path)
     # content = bucket.blob(file_path).download_as_string()
-
 
     pickle_in = blob.download_as_string()
     df = pickle.loads(pickle_in)
@@ -71,7 +68,7 @@ def read_file(bucket_name, file_path):
 bucket_name = "potluck_bucket"
 file_path = "clean_df.pkl"
 
-df = read_file(bucket_name, file_path)
+# df = read_file(bucket_name, file_path)
 
 
 
@@ -100,7 +97,7 @@ with st.container():
 with st.container():
     left_column, right_column = st.columns(2)
     with left_column:
-        
+
         with st.form('Where the magic happens...'):
             st.markdown('**Enter your ingredients here, separated by a comma**')
             ingredients = st.text_area(label='')
