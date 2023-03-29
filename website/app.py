@@ -3,8 +3,8 @@ import pickle
 import streamlit as st
 import os
 from streamlit_lottie import st_lottie
-from website.prediction import predict
-import os
+
+from potluck_code.model import easy_search
 import pandas as pd
 from gensim.models import Word2Vec
 
@@ -36,7 +36,7 @@ def local_css(file_name):
         st.markdown(F"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 root_dir = os.path.dirname(__file__)
-css_path = root_dir+"/style/style.css"
+css_path = "style/style.css"
 
 local_css(css_path)
 
@@ -65,6 +65,7 @@ def read_file(bucket_name, file_path):
 
     pickle_in = blob.download_as_string()
     df = pickle.loads(pickle_in)
+    # df = pd.read_pickle(pickle_in)
 
     return df
 
@@ -79,7 +80,7 @@ df = read_file(bucket_name, file_path)
 @st.cache_resource
 def load_model():
     root_dir = os.path.dirname(os.path.dirname(__file__))
-    data_path2 = root_dir+'/potluck_code/logic/food2vec_models/model.bin'
+    data_path2 = root_dir+'/potluck_code/food2vec_models/model.bin'
     model = Word2Vec.load(data_path2)
     return model
 model = load_model()
@@ -115,7 +116,7 @@ with st.container():
                 len_ingredients = len(ingredients.split(','))
                 num_ingredients = st.slider('How many ingredients would you like in your recipe as a minimum?', 1, len_ingredients, value=1)
 
-                prediction = predict(model, df, ingredients.split(','), int(mix), num_ingredients)
+                prediction = easy_search(model, df, ingredients.split(','), int(mix), num_ingredients)
 
                 recipes = len(prediction)
 
