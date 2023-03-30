@@ -2,6 +2,7 @@ import requests
 import pickle
 import streamlit as st
 from streamlit_lottie import st_lottie
+import json
 
 from potluck_code.model import easy_search
 import pandas as pd
@@ -103,9 +104,9 @@ with st.container():
            # st.markdown(f'<h6 style="color:#fbe8a6">{"Enter your ingredients here, separated by a comma"}</h6>', unsafe_allow_html=True)
             ingredients = st.text_area(label='**Enter your ingredients here, separated by a comma**')
                                        #, label_visibility='hidden')
-           
+
             mix = st.slider('**How adventurous are you feeling ?**', 0, 5, value=2)
-            
+
             button_style = """
                             <style>
                             .stButton > button {
@@ -116,10 +117,10 @@ with st.container():
                             }
                             </style>
                             """
-           
+
             st.markdown(button_style, unsafe_allow_html=True)
             submission = st.form_submit_button('**I am hungry...**')
-            
+
 
             if submission and ingredients == '':
                 st.write('Please enter some ingredients :tomato: :corn: :eggplant:')
