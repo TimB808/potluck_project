@@ -15,6 +15,7 @@ docker_build:
 		--platform linux/amd64 \
 		-t $(GCR_MULTI_REGION)/$(PROJECT_ID)/$(DOCKER_IMAGE_NAME):prod .
 
+# when docker_run is executed, a link will appear to do a test run locally. When opening this link, change the port no. to 8080 manually
 docker_run:
 	docker run \
 		--platform linux/amd64 \
@@ -38,5 +39,6 @@ docker_deploy:
 		--project $(PROJECT_ID) \
 		--image $(GCR_MULTI_REGION)/$(PROJECT_ID)/$(DOCKER_IMAGE_NAME):prod \
 		--platform managed \
-		--memory 2Gi \
+		--memory 4Gi \
+		--min-instances 1 \
 		--region europe-west1
