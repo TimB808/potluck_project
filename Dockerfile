@@ -5,10 +5,10 @@ WORKDIR /prod
 COPY requirements.txt requirements.txt
 
 RUN pip install --upgrade pip
-# RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
-COPY potluck_code potluck_code
 COPY raw_data raw_data
+COPY potluck_code potluck_code
 COPY style style
 COPY app.py app.py
 COPY .streamlit .streamlit
