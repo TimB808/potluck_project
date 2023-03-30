@@ -11,9 +11,10 @@ from google.oauth2 import service_account
 from google.cloud import storage
 
 # Create API client.
-credentials = service_account.Credentials.from_service_account_info(
-   st.secrets["gcp_service_account"]
-)
+#credentials = service_account.Credentials.from_service_account_info(
+#   st.secrets["gcp_service_account"]
+#)
+
 
 
 # ---add heading---
@@ -68,7 +69,7 @@ def read_file(bucket_name, file_path):
 bucket_name = "potluck_bucket"
 file_path = "clean_df.pkl"
 
-# df = read_file(bucket_name, file_path)
+#df = read_file(bucket_name, file_path)
 
 
 
@@ -99,12 +100,29 @@ with st.container():
     with left_column:
 
         with st.form('Where the magic happens...'):
-            st.markdown('**Enter your ingredients here, separated by a comma**')
-            ingredients = st.text_area(label='')
-
-            mix = st.slider('How adventurous are you feeling ?', 0, 5, value=2)
-
-            submission = st.form_submit_button('I am hungry...')
+            st.markdown(f'<h5 style="color:#fbe8a6">{"Enter your ingredients here, separated by a comma"}</h5>', unsafe_allow_html=True)
+            ingredients = st.text_area(label='ingredients', label_visibility='hidden')
+            
+            st.markdown('##')
+            st.markdown(f'<h6 style="color:#fbe8a6">{"How adventurous are you feeling ?"}</h6>', unsafe_allow_html=True)
+            mix = st.slider('slider', 0, 5, value=2, label_visibility='hidden')
+            
+            button_style = """
+                            <style>
+                            .stButton > button {
+                                color: #fbe8a6;
+                                background: #303c6c;
+                                width: 200px;
+                                height: 50px;
+                                font-size: 40px;
+                                font-weight: bold;
+                            }
+                            </style>
+                            """
+           
+            st.markdown(button_style, unsafe_allow_html=True)
+            submission = st.form_submit_button('**I am hungry...**')
+            
 
             if submission and ingredients == '':
                 st.write('Please enter some ingredients :tomato: :corn: :eggplant:')
@@ -122,18 +140,19 @@ with st.container():
 # RETURN RECIPES
 with st.container():
     st.subheader('Here are some suggestions...')
+    st.markdown('##')
     if submission and ingredients == '':
         st.write('No recipes available')
     elif submission and recipes > 0:
         wcols = 2
-        cols = st.columns(wcols)
+        cols = st.columns(wcols, gap='medium')
         for i in range(recipes):
             col = cols[i%wcols]
             with col:
-                left, middle, right = st.columns([3,1,2])
+                left, middle, right = st.columns([4,1,2])
                 with left:
                     name = prediction.iloc[i]['name']
-                    st.markdown(f'<p1 style="color:#f4976c">{name}</p1>', unsafe_allow_html=True)
+                    st.markdown(f'<h5 style="color:#f4976c">{name}</h5>', unsafe_allow_html=True)
                 with right:
                     rating = f"Average Rating {prediction.iloc[i]['avg_rating']}:star:"
                     st.markdown(f'<p1 style="color:#f4976c">{rating}</p1>', unsafe_allow_html=True)
@@ -144,6 +163,7 @@ with st.container():
                     st.write('Ingredients\n', prediction.iloc[i]['ingredients'])
                     st.text('')
                     st.write('Steps\n', prediction.iloc[i]['steps'])
+                st.markdown('#')
 
     elif submission:
         st.write('Sorry no recipes, might be time to go to the shops..! :blush:')
