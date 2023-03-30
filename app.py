@@ -8,8 +8,8 @@ from potluck_code.model import easy_search
 import pandas as pd
 from gensim.models import Word2Vec
 
-from google.oauth2 import service_account
-from google.cloud import storage
+#from google.oauth2 import service_account
+#from google.cloud import storage
 
 # Create API client.
 #credentials = service_account.Credentials.from_service_account_info(
@@ -45,6 +45,7 @@ lottie_coding = load_lottieurl('https://assets3.lottiefiles.com/packages/lf20_fe
 
 
 # code for local loading
+@st.cache_data
 def load_df():
     data_path = 'raw_data/clean_df.pkl'
     df = pd.read_pickle(data_path)
@@ -54,21 +55,21 @@ df = load_df()
 
 
 # GCS code to add - to replace load_df function; what to put instead of 'download_as_string'?:
-@st.cache_resource
-def read_file(bucket_name, file_path):
-    client = storage.Client(credentials=credentials)
-    bucket = client.bucket(bucket_name)
-    blob = bucket.blob(file_path)
-    # content = bucket.blob(file_path).download_as_string()
+# @st.cache_resource
+# def read_file(bucket_name, file_path):
+#     client = storage.Client(credentials=credentials)
+#     bucket = client.bucket(bucket_name)
+#     blob = bucket.blob(file_path)
+#     # content = bucket.blob(file_path).download_as_string()
 
-    pickle_in = blob.download_as_string()
-    df = pickle.loads(pickle_in)
-    # df = pd.read_pickle(pickle_in)
+#     pickle_in = blob.download_as_string()
+#     df = pickle.loads(pickle_in)
+#     # df = pd.read_pickle(pickle_in)
 
-    return df
+#     return df
 
-bucket_name = "potluck_bucket"
-file_path = "clean_df.pkl"
+# bucket_name = "potluck_bucket"
+# file_path = "clean_df.pkl"
 
 #df = read_file(bucket_name, file_path)
 
