@@ -100,12 +100,11 @@ with st.container():
     with left_column:
 
         with st.form('Where the magic happens...'):
-            st.markdown(f'<h5 style="color:#fbe8a6">{"Enter your ingredients here, separated by a comma"}</h5>', unsafe_allow_html=True)
-            ingredients = st.text_area(label='ingredients', label_visibility='hidden')
-            
-            st.markdown('##')
-            st.markdown(f'<h6 style="color:#fbe8a6">{"How adventurous are you feeling ?"}</h6>', unsafe_allow_html=True)
-            mix = st.slider('slider', 0, 5, value=2, label_visibility='hidden')
+           # st.markdown(f'<h6 style="color:#fbe8a6">{"Enter your ingredients here, separated by a comma"}</h6>', unsafe_allow_html=True)
+            ingredients = st.text_area(label='**Enter your ingredients here, separated by a comma**')
+                                       #, label_visibility='hidden')
+           
+            mix = st.slider('**How adventurous are you feeling ?**', 0, 5, value=2)
             
             button_style = """
                             <style>
@@ -114,8 +113,6 @@ with st.container():
                                 background: #303c6c;
                                 width: 200px;
                                 height: 50px;
-                                font-size: 40px;
-                                font-weight: bold;
                             }
                             </style>
                             """
