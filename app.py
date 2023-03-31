@@ -3,6 +3,7 @@ import json
 import pickle
 import streamlit as st
 from streamlit_lottie import st_lottie
+import json
 
 from potluck_code.model import easy_search
 import pandas as pd
