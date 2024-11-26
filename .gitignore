@@ -40,6 +40,8 @@ models/
 .credentials
 .streamlit/secrets.toml
 *.json
+cloud-sdk-keyring.gpg
+cloud-sdk-keyring.gpg.gpg
 
 # User defined extras
 # Complete to your desire
