@@ -39,8 +39,11 @@ css_path = "style/style.css"
 local_css(css_path)
 
 # LOAD ASSETS
+def load_lottiefile(filepath: str):
+    with open(filepath, "r") as f:
+        return json.load(f)
 
-lottie_coding = load_lottieurl('https://assets3.lottiefiles.com/packages/lf20_fefIZO.json')
+lottie_coding = load_lottiefile("assets/cooking_animation.json")
 
 
 
